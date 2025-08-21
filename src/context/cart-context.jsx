@@ -43,26 +43,31 @@ export function CartProvider({ children }) {
 
   const addToCart = (item, restaurantInfo) => {
     setCart(prevCart => {
-
-      if (restaurant && restaurant.id !== restaurantInfo.id) { //if the restaurant is not the same
-        const updatedCart = [{ ...item, quantity: 1 }];
+      // If adding from a different restaurant, clear the cart first
+      if (restaurant && restaurant.id !== restaurantInfo.id) {
+        const updatedCart = [{ ...item, quantity: item.quantity || 1 }];
         updateCartTotals(updatedCart);
         setRestaurant(restaurantInfo);
         return updatedCart;
       }
 
-      const existingItemIndex = prevCart.findIndex(cartItem => cartItem.id === item.id); //find the index of the item in the cart
+      const existingItemIndex = prevCart.findIndex(cartItem => cartItem.id === item.id);
       
       let updatedCart;
-      if (existingItemIndex >= 0) { //if the item is already in the cart
+      if (existingItemIndex >= 0) {
+        // If item exists, update its quantity
         updatedCart = [...prevCart];
-        updatedCart[existingItemIndex].quantity += 1;
-      } else { //if the item is not in the cart
-        updatedCart = [...prevCart, { ...item, quantity: 1 }];
+        updatedCart[existingItemIndex] = {
+          ...updatedCart[existingItemIndex],
+          quantity: (updatedCart[existingItemIndex].quantity || 0) + (item.quantity || 1)
+        };
+      } else {
+        // Add new item to cart
+        updatedCart = [...prevCart, { ...item, quantity: item.quantity || 1 }];
       }
       
       updateCartTotals(updatedCart);
-      if (!restaurant) { //if the restaurant is not set
+      if (!restaurant) {
         setRestaurant(restaurantInfo);
       }
       return updatedCart;

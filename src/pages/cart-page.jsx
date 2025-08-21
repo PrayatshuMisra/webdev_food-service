@@ -83,7 +83,7 @@ export default function Cart() { //this will be used to display the cart page
   const orderTotal = subtotal + deliveryFee + tax;
 
   return (
-    <div className="bg-gray-50 min-h-screen pb-16">
+    <div className="bg-gray-50 min-h-screen pb-24">
       <div className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center">
@@ -232,13 +232,15 @@ export default function Cart() { //this will be used to display the cart page
               </div>
             </div>
             
-            <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4">
-              <button
-                onClick={handleProceedToCheckout}
-                className="w-full bg-primary text-white font-medium py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors"
-              >
-                Proceed to Checkout • INR{orderTotal.toFixed(2)}
-              </button>
+            <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 shadow-lg z-50">
+              <div className="container mx-auto px-4">
+                <button
+                  onClick={handleProceedToCheckout}
+                  className="w-full bg-primary text-white font-medium py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors shadow-md"
+                >
+                  Proceed to Checkout • INR{orderTotal.toFixed(2)}
+                </button>
+              </div>
             </div>
           </>
         ) : (

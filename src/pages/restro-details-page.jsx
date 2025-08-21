@@ -64,8 +64,14 @@ export default function RestaurantDetail() {  //this will be used to display the
   const [restaurant, setRestaurant] = useState(null);
   const [activeCategory, setActiveCategory] = useState('');
   const [expandedSections, setExpandedSections] = useState({});
+  const openItemModal = (item) => {
+    setSelectedItem(item);
+    setSelectedAddons({});
+    setSpecialInstructions('');
+    setQuantity(0);
+  };
   const [selectedItem, setSelectedItem] = useState(null);
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(0);
   const [selectedAddons, setSelectedAddons] = useState({});
   const [specialInstructions, setSpecialInstructions] = useState('');
   const [isFavorite, setIsFavorite] = useState(false);
@@ -235,12 +241,35 @@ export default function RestaurantDetail() {  //this will be used to display the
                                 }}
                               />
                             </div>
-                            <button
-                              onClick={() => openItemModal(item)}
-                              className="mt-2 w-full bg-primary text-white text-sm font-medium py-1 px-3 rounded-md hover:bg-primary/90 transition-colors"
-                            >
-                              Add to Cart
-                            </button>
+                            <div className="mt-2 flex items-center justify-center">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedItem(item);
+                                  setQuantity(prev => Math.max(0, prev - 1));
+                                  if (quantity === 1) {
+                                    // Remove from cart when quantity reaches 0
+                                    return;
+                                  }
+                                }}
+                                className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-l-md hover:bg-gray-300 transition-colors"
+                              >
+                                <FiMinus size={14} />
+                              </button>
+                              <span className="w-10 text-center text-sm font-medium">
+                                {quantity}
+                              </span>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedItem(item);
+                                  setQuantity(prev => prev + 1);
+                                }}
+                                className="w-8 h-8 flex items-center justify-center bg-primary text-white rounded-r-md hover:bg-primary/90 transition-colors"
+                              >
+                                <FiPlus size={14} />
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
